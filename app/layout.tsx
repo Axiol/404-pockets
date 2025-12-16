@@ -36,6 +36,12 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <header className="flex items-center justify-between p-4 border-b">
+            <div className="w-full max-w-5xl mx-auto flex justify-between items-center">
+              <h1 className="font-bold">404 Pockets</h1>
+              <UserButton />
+            </div>
+          </header>
           {children}
         </body>
       </html>
