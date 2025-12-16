@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-
+import Link from "next/link"
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -10,7 +10,7 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-
+import { Button } from "@/components/ui/button"
 import {
   Table,
   TableBody,
@@ -47,7 +47,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 justify-between">
         <Input
           placeholder="Filtrer..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -56,6 +56,9 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        <Button asChild>
+          <Link href="/add">Ajouter</Link>
+        </Button>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>

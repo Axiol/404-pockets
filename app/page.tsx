@@ -20,8 +20,6 @@ export default async function Home() {
   const data = await getData()
 
   return (
-    <main className="max-w-5xl mx-auto mt-10">
-      <DataTable columns={columns} data={data} />
-    </main>
+    <DataTable columns={columns} data={data} />
   );
 }

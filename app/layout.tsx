@@ -42,7 +42,10 @@ export default function RootLayout({
               <UserButton />
             </div>
           </header>
-          {children}
+          <main className="max-w-5xl mx-auto mt-10">
+            {children}
+          </main>
+
         </body>
       </html>
     </ClerkProvider>
