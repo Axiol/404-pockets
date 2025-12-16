@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Combobox } from "./combobox"
 
 export default function RessourceForm() {
   const router = useRouter()
@@ -22,9 +23,16 @@ export default function RessourceForm() {
           <FieldLabel htmlFor="ressource-name">
             Ressource
           </FieldLabel>
+          <Combobox />
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="name">
+            Nom
+          </FieldLabel>
           <Input
-            id="ressource-name"
-            placeholder="Carinite (Pure)"
+            id="name"
+            placeholder="Trinotium"
             required
           />
         </Field>
