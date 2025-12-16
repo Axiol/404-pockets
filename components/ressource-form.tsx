@@ -1,11 +1,13 @@
 'use client'
 
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Field, FieldLabel, FieldGroup } from "./ui/field"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 
 export default function RessourceForm() {
+  const router = useRouter()
+
   return (
     <form>
       <FieldGroup>
@@ -33,9 +35,7 @@ export default function RessourceForm() {
 
         <Field orientation="horizontal">
           <Button type="submit">Envoyer</Button>
-          <Button variant="outline" type="button" asChild>
-            <Link href="/">Annuler</Link>
-          </Button>
+          <Button onClick={() => router.back()} variant="outline" type="button">Annuler</Button>
         </Field>
       </FieldGroup>
     </form>
