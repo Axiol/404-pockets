@@ -19,30 +19,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-]
+interface ComboboxProps {
+  options: { id: number; name: string }[]
+}
 
-export function Combobox() {
+export function Combobox({ options }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
 
@@ -56,7 +37,7 @@ export function Combobox() {
           className="w-full justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+            ? options.find((option) => String(option.id) === value)?.name
             : "Choisir"}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -67,10 +48,10 @@ export function Combobox() {
           <CommandList>
             <CommandEmpty>Rien de trouvé</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {options.map((option) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={option.id}
+                  value={String(option.id)}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue)
                     setOpen(false)
@@ -79,10 +60,10 @@ export function Combobox() {
                   <CheckIcon
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      value === String(option.id) ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {framework.label}
+                  {option.name}
                 </CommandItem>
               ))}
             </CommandGroup>

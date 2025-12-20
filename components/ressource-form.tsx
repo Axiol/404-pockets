@@ -16,7 +16,11 @@ import {
 import { Combobox } from "./combobox"
 import { useState } from "react"
 
-export default function RessourceForm() {
+interface RessourceFormProps {
+  ressources: { id: number; name: string }[]
+}
+
+export default function RessourceForm({ ressources }: RessourceFormProps) {
   const router = useRouter()
   const [createRessource, setCreateRessource] = useState<Boolean>(false)
 
@@ -27,7 +31,7 @@ export default function RessourceForm() {
           <FieldLabel htmlFor="ressource-name">
             Ressource
           </FieldLabel>
-          <Combobox />
+          <Combobox options={ressources} />
         </Field>
 
         <Field>
