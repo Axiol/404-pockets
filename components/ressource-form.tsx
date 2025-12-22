@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Combobox } from "./combobox"
-import { useState } from "react"
 
 interface RessourceFormProps {
   ressources: { id: number; name: string }[]
@@ -28,11 +27,20 @@ const formSchema = z.object({
   newRessourceName: z.string().optional(),
   newRessourceType: z.string().optional(),
   amount: z.number(),
+  createRessource: z.boolean(),
+}).refine((data) => {
+  if (!data.createRessource) {
+    return data.ressourceId !== undefined
+  }
+  return data.newRessourceName && data.newRessourceName.trim() !== "" &&
+    data.newRessourceType && data.newRessourceType.trim() !== ""
+}, {
+  message: "Veuillez remplir les champs requis",
+  path: [],
 })
 
 export default function RessourceForm({ ressources }: RessourceFormProps) {
   const router = useRouter()
-  const [createRessource, setCreateRessource] = useState<Boolean>(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,8 +48,11 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
       newRessourceName: "",
       newRessourceType: "",
       amount: undefined,
+      createRessource: false,
     },
   })
+
+  const createRessource = form.watch("createRessource")
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data)
@@ -67,12 +78,22 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
           )}
         />
 
-        <Field>
-          <div className="flex items-center space-x-2">
-            <Switch id="create-ressource" onCheckedChange={(e) => setCreateRessource(e)} />
-            <Label htmlFor="create-ressource">Créer une nouvelle ressource</Label>
-          </div>
-        </Field>
+        <Controller
+          name="createRessource"
+          control={form.control}
+          render={({ field }) => (
+            <Field>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="create-ressource"
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+                <Label htmlFor="create-ressource">Créer une nouvelle ressource</Label>
+              </div>
+            </Field>
+          )}
+        />
 
         {createRessource && (<>
           <Controller
@@ -100,7 +121,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
                 <FieldLabel htmlFor="type">
                   Type
                 </FieldLabel>
-                <Select {...field}>
+                <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger id="type">
                     <SelectValue placeholder="Other" />
                   </SelectTrigger>
