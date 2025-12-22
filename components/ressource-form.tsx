@@ -47,7 +47,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
       ressourceId: undefined,
       newRessourceName: "",
       newRessourceType: "",
-      amount: undefined,
+      amount: 0,
       createRessource: false,
     },
   })
@@ -151,11 +151,17 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
                 Quantité
               </FieldLabel>
               <Input
-                {...field}
+                value={field.value || ""}
                 type="number"
                 id="quantity"
                 placeholder="123"
-                onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                onChange={(e) => {
+                  const value = e.target.valueAsNumber
+                  field.onChange(isNaN(value) ? 0 : value)
+                }}
+                onBlur={field.onBlur}
+                name={field.name}
+                ref={field.ref}
                 required
               />
             </Field>
