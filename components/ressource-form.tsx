@@ -58,7 +58,11 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
               <FieldLabel htmlFor="ressource-name">
                 Ressource
               </FieldLabel>
-              <Combobox options={ressources} />
+              <Combobox
+                options={ressources}
+                value={field.value}
+                onChange={field.onChange}
+              />
             </Field>
           )}
         />

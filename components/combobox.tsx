@@ -21,11 +21,12 @@ import {
 
 interface ComboboxProps {
   options: { id: number; name: string }[]
+  value?: number
+  onChange?: (value: number | undefined) => void
 }
 
-export function Combobox({ options }: ComboboxProps) {
+export function Combobox({ options, value, onChange }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -37,7 +38,7 @@ export function Combobox({ options }: ComboboxProps) {
           className="w-full justify-between"
         >
           {value
-            ? options.find((option) => String(option.id) === value)?.name
+            ? options.find((option) => option.id === value)?.name
             : "Choisir"}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -53,14 +54,16 @@ export function Combobox({ options }: ComboboxProps) {
                   key={option.id}
                   value={String(option.id)}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
+                    const selectedId = parseInt(currentValue)
+                    const newValue = selectedId === value ? undefined : selectedId
+                    onChange?.(newValue)
                     setOpen(false)
                   }}
                 >
                   <CheckIcon
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === String(option.id) ? "opacity-100" : "opacity-0"
+                      value === option.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {option.name}
