@@ -19,10 +19,8 @@ export const addStock = async (ressourceId: number, amount: number) => {
   }
 
   const user = await currentUser()
-  console.log("Current user:", user?.id)
-  console.log("Adding stock:", { ressourceId, amount });
 
   const sql = neon(process.env.DATABASE_URL);
-  const data = await sql`INSERT INTO stocks (ressource_id, user_id, amount) VALUES (${ressourceId}, ${user?.id}, ${amount})`;
+  const data = await sql`INSERT INTO stocks (ressource_id, user_id, amount) VALUES (${ressourceId}, ${user?.id}, ${amount}) RETURNING id`;
   return data
 }

@@ -59,8 +59,11 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data)
     if (!createRessource) {
-      console.log('CREER')
-      await addStock(data.ressourceId as number, data.amount)
+      const newStock = await addStock(data.ressourceId as number, data.amount)
+
+      if (!newStock[0]?.id) {
+        toast.error("Erreur lors de l'ajout à votre stock")
+      }
 
       toast.success("Ressource ajoutée avec succès")
       router.push('/')
@@ -70,24 +73,26 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
   return (
     <form onSubmit={form.handleSubmit(onSubmit, (errors) => console.log("Erreurs:", errors))}>
       <FieldGroup>
-        <Controller
-          name="ressourceId"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field>
-              <FieldLabel htmlFor="ressource-name">
-                Ressource
-              </FieldLabel>
-              <Combobox
-                options={ressources}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            </Field>
-          )}
-        />
+        {!createRessource && (
+          <Controller
+            name="ressourceId"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel htmlFor="ressource-name">
+                  Ressource
+                </FieldLabel>
+                <Combobox
+                  options={ressources}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </Field>
+            )}
+          />
+        )}
 
-        <Controller
+        < Controller
           name="createRessource"
           control={form.control}
           render={({ field }) => (
