@@ -21,7 +21,28 @@ export const addStock = async (ressourceId: number, amount: number) => {
   const user = await currentUser()
 
   const sql = neon(process.env.DATABASE_URL);
-  const data = await sql`INSERT INTO stocks (ressource_id, user_id, amount) VALUES (${ressourceId}, ${user?.id}, ${amount}) RETURNING id`;
+  try {
+    const data = await sql`INSERT INTO stocks (ressource_id, user_id, amount) VALUES (${ressourceId}, ${user?.id}, ${amount}) RETURNING id`;
+    return data
+  } catch (error) {
+    const e = error as { constraint?: string }
+    if (e?.constraint && e.constraint === 'constraint_user_ressource') {
+      const updateData = await addToExistingStcok(ressourceId, amount)
+      return updateData
+    }
+  }
+}
+
+const addToExistingStcok = async (ressourceId: number, amount: number) => {
+  console.log("Updating existing stock")
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is not defined");
+  }
+
+  const user = await currentUser()
+
+  const sql = neon(process.env.DATABASE_URL);
+  const data = await sql`UPDATE stocks SET amount = amount + ${amount} WHERE ressource_id = ${ressourceId} AND user_id = ${user?.id} RETURNING id`
   return data
 }
 

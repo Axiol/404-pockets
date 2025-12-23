@@ -96,7 +96,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
 
     const newStock = await addStock(ressourceId as number, data.amount)
 
-    if (!newStock[0]?.id) {
+    if (!newStock || !newStock[0]?.id) {
       toast.error("Erreur lors de l'ajout à votre stock")
       return
     }
