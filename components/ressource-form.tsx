@@ -6,7 +6,7 @@ import { Controller, useForm } from "react-hook-form"
 import { Switch } from "./ui/switch"
 import { Label } from "./ui/label"
 import { useRouter } from "next/navigation"
-import { Field, FieldLabel, FieldGroup } from "./ui/field"
+import { Field, FieldLabel, FieldGroup, FieldError } from "./ui/field"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import {
@@ -24,22 +24,40 @@ interface RessourceFormProps {
   ressources: { id: number; name: string }[]
 }
 
-const formSchema = z.object({
-  ressourceId: z.number().optional(),
-  newRessourceName: z.string().optional(),
-  newRessourceType: z.string().optional(),
-  amount: z.number(),
-  createRessource: z.boolean(),
-}).refine((data) => {
-  if (!data.createRessource) {
-    return data.ressourceId !== undefined
-  }
-  return data.newRessourceName && data.newRessourceName.trim() !== "" &&
-    data.newRessourceType && data.newRessourceType.trim() !== ""
-}, {
-  message: "Veuillez remplir les champs requis",
-  path: [],
-})
+const formSchema = z
+  .object({
+    ressourceId: z.number().optional(),
+    newRessourceName: z.string().trim().min(1, "Le nom est requis").optional().or(z.literal("")),
+    newRessourceType: z.string().min(1, "Le type est requis").optional().or(z.literal("")),
+    amount: z.number().min(1, "La quantité doit être supérieure à 0"),
+    createRessource: z.boolean(),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.createRessource && data.ressourceId === undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        message: "Veuillez sélectionner une ressource",
+        path: ["ressourceId"],
+      })
+    }
+
+    if (data.createRessource) {
+      if (!data.newRessourceName || data.newRessourceName === "") {
+        ctx.addIssue({
+          code: 'custom',
+          message: "Le nom est requis",
+          path: ["newRessourceName"],
+        })
+      }
+      if (!data.newRessourceType || data.newRessourceType === "") {
+        ctx.addIssue({
+          code: 'custom',
+          message: "Le type est requis",
+          path: ["newRessourceType"],
+        })
+      }
+    }
+  })
 
 export default function RessourceForm({ ressources }: RessourceFormProps) {
   const router = useRouter()
@@ -88,7 +106,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit, (errors) => console.log("Erreurs:", errors))}>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       <FieldGroup>
         {!createRessource && (
           <Controller
@@ -104,12 +122,13 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
                   value={field.value}
                   onChange={field.onChange}
                 />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
           />
         )}
 
-        < Controller
+        <Controller
           name="createRessource"
           control={form.control}
           render={({ field }) => (
@@ -140,6 +159,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
                   id="ressource-name"
                   placeholder="Carinite (Pure)"
                 />
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
           />
@@ -168,6 +188,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
                     <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
               </Field>
             )}
           />
@@ -193,8 +214,8 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
                 onBlur={field.onBlur}
                 name={field.name}
                 ref={field.ref}
-                required
               />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
