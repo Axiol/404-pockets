@@ -17,6 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Combobox } from "./combobox"
+import { addStock } from "./actions"
+import { toast } from "sonner"
 
 interface RessourceFormProps {
   ressources: { id: number; name: string }[]
@@ -54,8 +56,15 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
 
   const createRessource = form.watch("createRessource")
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data)
+    if (!createRessource) {
+      console.log('CREER')
+      await addStock(data.ressourceId as number, data.amount)
+
+      toast.success("Ressource ajoutée avec succès")
+      router.push('/')
+    }
   }
 
   return (
