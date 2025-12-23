@@ -1,10 +1,13 @@
 import Modal from "@/components/modal";
 import RessourceForm from "@/components/ressource-form";
 
-export default function AddModal() {
+import { getRessourceOptions } from "@/app/actions"
+export default async function AddModal() {
+  const ressourceOptions = await getRessourceOptions()
+
   return (
     <Modal>
-      <RessourceForm />
+      <RessourceForm ressources={ressourceOptions} />
     </Modal>
   )
 }
