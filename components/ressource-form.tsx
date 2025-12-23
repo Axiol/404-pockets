@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Combobox } from "./combobox"
-import { addStock } from "./actions"
+import { addStock, addRessource } from "./actions"
 import { toast } from "sonner"
 
 interface RessourceFormProps {
@@ -58,16 +58,33 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data)
-    if (!createRessource) {
-      const newStock = await addStock(data.ressourceId as number, data.amount)
+    let ressourceId = data.ressourceId
 
-      if (!newStock[0]?.id) {
-        toast.error("Erreur lors de l'ajout à votre stock")
+    if (createRessource) {
+      if (!data.newRessourceName || !data.newRessourceType) {
+        toast.error("Erreur lors de la création de la ressource")
+        return
       }
 
-      toast.success("Ressource ajoutée avec succès")
-      router.push('/')
+      const newRessource = await addRessource(data.newRessourceName, data.newRessourceType)
+
+      if (!newRessource[0]?.id) {
+        toast.error("Erreur lors de l'ajout à votre stock")
+        return
+      }
+
+      ressourceId = newRessource[0].id
     }
+
+    const newStock = await addStock(ressourceId as number, data.amount)
+
+    if (!newStock[0]?.id) {
+      toast.error("Erreur lors de l'ajout à votre stock")
+      return
+    }
+
+    toast.success("Ressource ajoutée avec succès")
+    router.push('/')
   }
 
   return (
