@@ -9,19 +9,24 @@ export type Ressource = {
 
 export const columns: ColumnDef<Ressource>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
-  },
-  {
     accessorKey: "name",
     header: "Nom",
+    size: 300,
+    minSize: 150,
+    maxSize: 500,
   },
   {
     accessorKey: "type",
     header: "Type",
+    size: 200,
+    minSize: 100,
+    maxSize: 300,
   },
   {
     accessorKey: "amount",
     header: "Quantité",
+    size: 150,
+    minSize: 100,
+    maxSize: 200,
   },
 ]

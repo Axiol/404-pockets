@@ -20,26 +20,32 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  userData: TData[]
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  userData,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
+  const [showUserData, setShowUserData] = useState(false)
 
   const table = useReactTable({
-    data,
+    data: showUserData ? userData : data,
     columns,
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
+    columnResizeMode: "onChange",
     state: {
       columnFilters,
     },
@@ -56,9 +62,19 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <Button asChild>
-          <Link href="/add">Ajouter</Link>
-        </Button>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="user-data"
+              checked={showUserData}
+              onCheckedChange={setShowUserData}
+            />
+            <Label htmlFor="user-data">Mes ressources</Label>
+          </div>
+          <Button asChild>
+            <Link href="/add">Ajouter</Link>
+          </Button>
+        </div>
       </div>
       <div className="overflow-hidden rounded-md border">
         <Table>
@@ -67,7 +83,10 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      style={{ width: `${header.getSize()}px` }}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -88,7 +107,10 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      style={{ width: `${cell.column.getSize()}px` }}
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
