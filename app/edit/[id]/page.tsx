@@ -16,8 +16,6 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
     redirect('/')
   }
 
-  console.log("Stock to edit:", stock)
-
   return (
     <>
       <h2 className="font-bold text-xl mb-9">Modifier une ressource</h2>

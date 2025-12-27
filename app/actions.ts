@@ -94,3 +94,13 @@ export const updateStockAmount = async (id: number, amount: number) => {
   const data = await sql`UPDATE stocks SET amount = ${amount} WHERE id = ${id} RETURNING id`
   return data as { id: number }[]
 }
+
+export const deteleStock = async (id: number) => {
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is not defined")
+  }
+
+  const sql = neon(process.env.DATABASE_URL)
+  const data = await sql`DELETE FROM stocks WHERE id = ${id} RETURNING id`
+  return data as { id: number }[]
+}

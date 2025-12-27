@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, FieldError, FieldDescription, FieldGroup, FieldLabel } from "./ui/field"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
-import { updateStockAmount } from "@/app/actions"
+import { deteleStock, updateStockAmount } from "@/app/actions"
 
 const formSchema = z.object({
   amount: z.number()
@@ -32,6 +32,19 @@ export default function EditForm({ stock }: EditFormProps) {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data)
+    if (data.amount === 0) {
+      const detetedStock = await deteleStock(stock.id)
+
+      if (detetedStock.length === 0) {
+        toast.error("Une erreur est survenue lors de la suppression de la ressource.")
+        return
+      }
+
+      toast.success("Ressource supprimée avec succès.")
+      router.push('/')
+      return
+    }
+
     const updateStock = await updateStockAmount(stock.id, data.amount)
 
     if (updateStock.length === 0) {
