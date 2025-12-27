@@ -221,8 +221,8 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
         />
 
         <Field orientation="horizontal">
-          <Button type="submit">Envoyer</Button>
-          <Button onClick={() => router.back()} variant="outline" type="button">Annuler</Button>
+          <Button className="cursor-pointer" type="submit">Envoyer</Button>
+          <Button className="cursor-pointer" onClick={() => router.back()} variant="outline" type="button">Annuler</Button>
         </Field>
       </FieldGroup>
     </form>

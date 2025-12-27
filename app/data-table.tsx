@@ -139,7 +139,7 @@ export function DataTable<TData, TValue>({
             />
             <Label htmlFor="user-data">Mes ressources</Label>
           </div>
-          <Button asChild>
+          <Button className="cursor-pointer" asChild>
             <Link href="/add">Ajouter</Link>
           </Button>
         </div>
