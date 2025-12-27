@@ -45,7 +45,7 @@ export default function RootLayout({
               <UserButton />
             </div>
           </header>
-          <main className="max-w-5xl mx-auto mt-10">
+          <main className="max-w-5xl mx-auto mt-10 p-4">
             {children}
           </main>
           {modal}
