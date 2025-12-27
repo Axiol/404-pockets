@@ -110,7 +110,8 @@ export function DataTable<TData, TValue>({
       columnFilters,
       expanded,
       columnVisibility: {
-        expander: !showUserData, // Masquer la colonne expander quand on affiche userData
+        expander: !showUserData,
+        edit: showUserData,
       },
     },
     meta: {

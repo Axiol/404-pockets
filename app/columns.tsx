@@ -1,8 +1,9 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { ChevronRight, ChevronDown } from "lucide-react"
+import { ChevronRight, ChevronDown, Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 export type UserStock = {
   userId: string
@@ -23,7 +24,6 @@ export const columns: ColumnDef<Ressource>[] = [
     id: "expander",
     header: () => null,
     cell: ({ row, table }) => {
-      // Ne montrer l'expander que pour les lignes de niveau 0 (pas les sous-lignes)
       if (row.depth > 0) return null
 
       return (
@@ -34,13 +34,35 @@ export const columns: ColumnDef<Ressource>[] = [
             // @ts-ignore - on accède à la fonction custom du table
             table.options.meta?.onExpand?.(row)
           }}
-          className="p-0 h-8 w-8"
+          className="p-0 h-8 w-8 cursor-pointer"
         >
           {row.getIsExpanded() ? (
             <ChevronDown className="h-4 w-4" />
           ) : (
             <ChevronRight className="h-4 w-4" />
           )}
+        </Button>
+      )
+    },
+    size: 50,
+    minSize: 50,
+    maxSize: 50,
+  },
+  {
+    id: "edit",
+    header: () => null,
+    cell: ({ row }) => {
+      if (row.depth > 0) return null
+      console.log(row.original)
+
+      return (
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          className="p-0 h-8 w-8 cursor-pointer"
+        >
+          <Link href={`/edit/${row.original.id}`}><Pencil className="h-4 w-4" /></Link>
         </Button>
       )
     },

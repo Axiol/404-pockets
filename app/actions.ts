@@ -32,7 +32,7 @@ export const getStockForUser = async () => {
   const user = await currentUser()
 
   const sql = neon(process.env.DATABASE_URL);
-  const data = await sql`SELECT r.name, r.type, s.amount FROM stocks s JOIN ressources r ON s.ressource_id = r.id WHERE s.user_id = ${user?.id}`;
+  const data = await sql`SELECT r.name, r.type, s.id, s.amount FROM stocks s JOIN ressources r ON s.ressource_id = r.id WHERE s.user_id = ${user?.id}`;
   return data as Ressource[]
 }
 
@@ -49,7 +49,6 @@ export const getStockDetails = async (ressourceId: string) => {
     ORDER BY s.amount DESC
   `;
 
-  // Récupérer les noms d'utilisateurs depuis Clerk
   const client = await clerkClient()
   const detailsWithUsernames = await Promise.all(
     data.map(async (stock) => {
@@ -72,4 +71,26 @@ export const getStockDetails = async (ressourceId: string) => {
   )
 
   return detailsWithUsernames
+}
+
+export const getStock = async (id: number) => {
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is not defined")
+  }
+
+  const user = await currentUser()
+
+  const sql = neon(process.env.DATABASE_URL)
+  const data = await sql`SELECT id, amount FROM stocks WHERE id = ${id} AND user_id = ${user?.id}`
+  return data as { id: number, amount: number }[]
+}
+
+export const updateStockAmount = async (id: number, amount: number) => {
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is not defined")
+  }
+
+  const sql = neon(process.env.DATABASE_URL)
+  const data = await sql`UPDATE stocks SET amount = ${amount} WHERE id = ${id} RETURNING id`
+  return data as { id: number }[]
 }
