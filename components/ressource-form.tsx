@@ -102,7 +102,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
     }
 
     toast.success("Ressource ajoutée avec succès")
-    router.push('/')
+    router.back()
   }
 
   return (

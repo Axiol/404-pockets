@@ -2,6 +2,7 @@
 
 import { neon } from "@neondatabase/serverless"
 import { currentUser } from '@clerk/nextjs/server'
+import { revalidatePath } from 'next/cache'
 
 export const getRessourceOptions = async () => {
   if (!process.env.DATABASE_URL) {
@@ -23,6 +24,7 @@ export const addStock = async (ressourceId: number, amount: number) => {
   const sql = neon(process.env.DATABASE_URL);
   try {
     const data = await sql`INSERT INTO stocks (ressource_id, user_id, amount) VALUES (${ressourceId}, ${user?.id}, ${amount}) RETURNING id`;
+    revalidatePath('/')
     return data
   } catch (error) {
     const e = error as { constraint?: string }
@@ -43,6 +45,7 @@ const addToExistingStcok = async (ressourceId: number, amount: number) => {
 
   const sql = neon(process.env.DATABASE_URL);
   const data = await sql`UPDATE stocks SET amount = amount + ${amount} WHERE ressource_id = ${ressourceId} AND user_id = ${user?.id} RETURNING id`
+  revalidatePath('/')
   return data
 }
 

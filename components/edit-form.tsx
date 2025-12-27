@@ -41,7 +41,7 @@ export default function EditForm({ stock }: EditFormProps) {
       }
 
       toast.success("Ressource supprimée avec succès.")
-      router.push('/')
+      router.back()
       return
     }
 
@@ -53,7 +53,7 @@ export default function EditForm({ stock }: EditFormProps) {
     }
 
     toast.success("Ressource mise à jour avec succès.")
-    router.push('/')
+    router.back()
   }
 
   return (

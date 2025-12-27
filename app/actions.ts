@@ -2,6 +2,7 @@
 
 import { neon } from "@neondatabase/serverless";
 import { currentUser, clerkClient } from '@clerk/nextjs/server'
+import { revalidatePath } from 'next/cache'
 import { Ressource } from "./columns";
 
 export const listStocks = async () => {
@@ -92,6 +93,7 @@ export const updateStockAmount = async (id: number, amount: number) => {
 
   const sql = neon(process.env.DATABASE_URL)
   const data = await sql`UPDATE stocks SET amount = ${amount} WHERE id = ${id} RETURNING id`
+  revalidatePath('/')
   return data as { id: number }[]
 }
 
@@ -102,5 +104,6 @@ export const deteleStock = async (id: number) => {
 
   const sql = neon(process.env.DATABASE_URL)
   const data = await sql`DELETE FROM stocks WHERE id = ${id} RETURNING id`
+  revalidatePath('/')
   return data as { id: number }[]
 }
