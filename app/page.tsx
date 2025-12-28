@@ -1,6 +1,6 @@
 import { listStocks, getStockForUser } from "./actions";
 import { columns } from "./columns"
-import { DataTable } from "./data-table"
+import { DataTable } from "@/components/data-table"
 
 export const dynamic = "force-dynamic"
 

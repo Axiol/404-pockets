@@ -13,7 +13,7 @@ import {
   useReactTable,
   Row,
 } from "@tanstack/react-table"
-import { getStockDetails } from "./actions"
+import { getStockDetails } from "@/app/actions"
 import { Button } from "@/components/ui/button"
 import {
   Table,
