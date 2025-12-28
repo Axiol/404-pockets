@@ -42,7 +42,7 @@ export function DataTable<TData, TValue>({
     []
   )
   const [showUserData, setShowUserData] = useState(false)
-  const [expanded, setExpanded] = useState<ExpandedState>({})
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({})
   const [loadingRows, setLoadingRows] = useState<Set<string>>(new Set())
   const [tableData, setTableData] = useState<TData[]>(data)
   const [isPending, startTransition] = useTransition()
@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({
     data: showUserData ? userData : tableData,
     columns,
     onColumnFiltersChange: setColumnFilters,
-    onExpandedChange: setExpanded,
+    onExpandedChange: setExpanded as any,
     getSubRows: (row) => (row as any).subRows,
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
@@ -108,7 +108,7 @@ export function DataTable<TData, TValue>({
     columnResizeMode: "onChange",
     state: {
       columnFilters,
-      expanded,
+      expanded: expanded as ExpandedState,
       columnVisibility: {
         expander: !showUserData,
         edit: showUserData,
