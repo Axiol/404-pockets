@@ -6,10 +6,12 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import "./globals.css"
 import { Toaster } from "@/components/ui/sonner"
+import { Github } from 'lucide-react'
+import Link from 'next/link'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,7 +54,7 @@ export default function RootLayout({
           </main>
           <footer className="px-4 w-full mt-6 mb-10 text-right text-sm text-muted-foreground">
             <div className="max-w-5xl mx-auto">
-              Made by Axiol, for the love of aUEC
+              Made by <Link href={'https://arnaud.ninja'} target='_blank' className='underline'>Axiol</Link>, for the love of aUEC - <Link href={"https://github.com/Axiol/404-pockets"} target='_blank'><Github className="align-text-top h-4 w-4 inline-block" /></Link>
             </div>
           </footer>
           {modal}
