@@ -17,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Combobox } from "./combobox"
-import { addStock, addRessource } from "./actions"
+import { addStock, addRessource } from "@/app/actions"
 import { toast } from "sonner"
 
 interface RessourceFormProps {

@@ -53,7 +53,8 @@ export default function RootLayout({
           <footer className="px-4 w-full mt-6 mb-10 text-right text-sm text-muted-foreground">
             <div className="max-w-5xl mx-auto">
               Made by Axiol, for the love of aUEC
-            </div></footer>
+            </div>
+          </footer>
           {modal}
           <Toaster />
         </body>
