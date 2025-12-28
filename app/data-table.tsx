@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useTransition } from "react"
+import { useState, useTransition, useEffect } from "react"
 import Link from "next/link"
 import {
   ColumnDef,
@@ -47,11 +47,14 @@ export function DataTable<TData, TValue>({
   const [tableData, setTableData] = useState<TData[]>(data)
   const [isPending, startTransition] = useTransition()
 
+  useEffect(() => {
+    setTableData(data)
+  }, [data])
+
   const handleExpand = async (row: Row<TData>) => {
     const rowId = row.id
     const ressource = row.original as any
 
-    // Si déjà expandé, juste le fermer
     if (expanded[rowId]) {
       setExpanded(prev => {
         const newExpanded = { ...prev }
@@ -61,7 +64,6 @@ export function DataTable<TData, TValue>({
       return
     }
 
-    // Si pas de subRows, charger les données
     if (!ressource.subRows || ressource.subRows.length === 0) {
       setLoadingRows(prev => new Set(prev).add(rowId))
 
@@ -69,7 +71,6 @@ export function DataTable<TData, TValue>({
         const details = await getStockDetails(ressource.id)
 
         startTransition(() => {
-          // Mettre à jour les données du tableau avec les subRows
           setTableData(prev =>
             prev.map((item: any) =>
               item.id === ressource.id
@@ -78,7 +79,6 @@ export function DataTable<TData, TValue>({
             )
           )
 
-          // Expand la ligne
           setExpanded(prev => ({ ...prev, [rowId]: true }))
         })
       } catch (error) {
@@ -91,7 +91,6 @@ export function DataTable<TData, TValue>({
         })
       }
     } else {
-      // Si les données existent déjà, juste expand
       setExpanded(prev => ({ ...prev, [rowId]: true }))
     }
   }
