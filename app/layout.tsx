@@ -37,7 +37,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="fr">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
         >
           <header className="flex items-center justify-between p-4 border-b">
             <div className="w-full max-w-5xl mx-auto flex justify-between items-center">
@@ -45,9 +45,15 @@ export default function RootLayout({
               <UserButton />
             </div>
           </header>
-          <main className="max-w-5xl mx-auto mt-10 p-4">
-            {children}
+          <main className="p-4">
+            <div className="max-w-5xl mx-auto mt-10">
+              {children}
+            </div>
           </main>
+          <footer className="px-4 w-full mt-6 mb-10 text-right text-sm text-muted-foreground">
+            <div className="max-w-5xl mx-auto">
+              Made by Axiol, for the love of aUEC
+            </div></footer>
           {modal}
           <Toaster />
         </body>
