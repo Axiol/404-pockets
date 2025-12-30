@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: 'Modifier une ressource de vos poches.',
 }
 
+export const dynamic = "force-dynamic"
+
 export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const stock = await getStock(parseInt(id))

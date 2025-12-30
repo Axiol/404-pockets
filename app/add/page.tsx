@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: 'Ajouter une ressource à vos poches.',
 }
 
+export const dynamic = "force-dynamic"
+
 export default async function AddPage() {
   const ressourceOptions = await getRessourceOptions()
 
