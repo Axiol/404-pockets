@@ -11,7 +11,7 @@ export const listStocks = async () => {
   }
 
   const sql = neon(process.env.DATABASE_URL);
-  const data = await sql`SELECT r.id, r.name, r.type, SUM(s.amount) as amount FROM ressources r INNER JOIN stocks s ON r.id = s.ressource_id GROUP BY r.id, r.name, r.type ORDER BY r.id`;
+  const data = await sql`SELECT r.id, r.name, r.type, r.size, SUM(s.amount) as amount FROM ressources r INNER JOIN stocks s ON r.id = s.ressource_id GROUP BY r.id, r.name, r.type ORDER BY r.name`;
   return data as Ressource[];
 }
 
@@ -33,7 +33,7 @@ export const getStockForUser = async () => {
   const user = await currentUser()
 
   const sql = neon(process.env.DATABASE_URL);
-  const data = await sql`SELECT r.name, r.type, s.id, s.amount FROM stocks s JOIN ressources r ON s.ressource_id = r.id WHERE s.user_id = ${user?.id}`;
+  const data = await sql`SELECT r.name, r.type, r.size, s.id, s.amount FROM stocks s JOIN ressources r ON s.ressource_id = r.id WHERE s.user_id = ${user?.id} ORDER BY r.name`;
   return data as Ressource[]
 }
 
@@ -143,13 +143,13 @@ const addToExistingStcok = async (ressourceId: number, amount: number) => {
   return data
 }
 
-export const addRessource = async (name: string, type: string) => {
+export const addRessource = async (name: string, type: string, size: string) => {
   if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL is not defined");
   }
 
   const sql = neon(process.env.DATABASE_URL);
-  const data = await sql`INSERT INTO ressources (name, type) VALUES (${name}, ${type}) RETURNING id`
+  const data = await sql`INSERT INTO ressources (name, type, size) VALUES (${name}, ${type}, ${size}) RETURNING id`
   return data
 }
 

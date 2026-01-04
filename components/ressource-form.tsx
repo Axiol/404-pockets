@@ -29,6 +29,7 @@ const formSchema = z
     ressourceId: z.number().optional(),
     newRessourceName: z.string().trim().min(1, "Le nom est requis").optional().or(z.literal("")),
     newRessourceType: z.string().min(1, "Le type est requis").optional().or(z.literal("")),
+    newRessourceSize: z.string().optional(),
     amount: z.number().min(1, "La quantité doit être supérieure à 0"),
     createRessource: z.boolean(),
   })
@@ -67,6 +68,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
       ressourceId: undefined,
       newRessourceName: "",
       newRessourceType: "",
+      newRessourceSize: "",
       amount: 0,
       createRessource: false,
     },
@@ -84,7 +86,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
         return
       }
 
-      const newRessource = await addRessource(data.newRessourceName, data.newRessourceType)
+      const newRessource = await addRessource(data.newRessourceName, data.newRessourceType, data.newRessourceSize)
 
       if (!newRessource[0]?.id) {
         toast.error("Erreur lors de l'ajout à votre stock")
@@ -174,7 +176,7 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
                 </FieldLabel>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger id="type">
-                    <SelectValue placeholder="Other" />
+                    <SelectValue placeholder="Choisir" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Armor">Armor</SelectItem>
@@ -192,6 +194,32 @@ export default function RessourceForm({ ressources }: RessourceFormProps) {
               </Field>
             )}
           />
+
+          <Controller
+            name="newRessourceSize"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field>
+                <FieldLabel htmlFor="size">
+                  Taille
+                </FieldLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger id="type">
+                    <SelectValue placeholder="Choisir, si nécessaire" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Size 0">Size 0</SelectItem>
+                    <SelectItem value="Size 1">Size 1</SelectItem>
+                    <SelectItem value="Size 2">Size 2</SelectItem>
+                    <SelectItem value="Size 3">Size 3</SelectItem>
+                    <SelectItem value="Size 4">Size 4</SelectItem>
+                  </SelectContent>
+                </Select>
+                {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              </Field>
+            )}
+          />
+
         </>)}
 
         <Controller

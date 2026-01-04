@@ -15,6 +15,7 @@ export type Ressource = {
   id: string
   name: string
   type: string
+  size: string
   amount: number
   subRows?: UserStock[]
 }
@@ -80,6 +81,13 @@ export const columns: ColumnDef<Ressource>[] = [
   {
     accessorKey: "type",
     header: "Type",
+    size: 200,
+    minSize: 100,
+    maxSize: 300,
+  },
+  {
+    accessorKey: "size",
+    header: "Taille",
     size: 200,
     minSize: 100,
     maxSize: 300,
