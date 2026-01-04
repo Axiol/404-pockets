@@ -149,7 +149,7 @@ export const addRessource = async (name: string, type: string, size: string | un
   }
 
   const sql = neon(process.env.DATABASE_URL);
-  const data = await sql`INSERT INTO ressources (name, type, size) VALUES (${name}, ${type}, ${size}) RETURNING id`
+  const data = await sql`INSERT INTO ressources (name, type, size) VALUES (${name}, ${type}, ${size !== '' ? size : undefined}) RETURNING id`
   return data
 }
 
