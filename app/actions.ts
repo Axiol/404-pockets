@@ -143,7 +143,7 @@ const addToExistingStcok = async (ressourceId: number, amount: number) => {
   return data
 }
 
-export const addRessource = async (name: string, type: string, size: string) => {
+export const addRessource = async (name: string, type: string, size: string | undefined) => {
   if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL is not defined");
   }
